@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attack Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .images {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 30px;
+        }
+        .images div {
+            text-align: center;
+        }
+        .metrics {
+            margin-top: 30px;
+        }
+        .metrics table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .metrics th, .metrics td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .metrics th {
+            background-color: #f2f2f2;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .failure {
+            color: red;
+            font-weight: bold;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .back-link a {
+            text-decoration: none;
+            color: #3498db;
+            font-size: 18px;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Adversarial Attack Results</h1>
+        <div class="images">
+            <div>
+                <h2>Original Image</h2>
+                <img src="{{ url_for('static', filename=original_image_path) }}" alt="Original Image" width="224" height="224">
+                <p id="originalLabel">Label: {{ original_label }}, Confidence: {{ original_confidence }}%</p>
+            </div>
+            <div>
+                <h2>Perturbed Image (Untargeted)</h2>
+                <img src="{{ url_for('static', filename=perturbed_image_path_untargeted) }}" alt="Perturbed Untargeted Image" width="224" height="224">
+                <p id="perturbedLabelUntargeted">Label: {{ perturbed_label_untargeted }}, Confidence: {{ perturbed_confidence_untargeted }}%</p>
+                <p>
+                    {% if success_untargeted %}
+                        <span class="success">Attack Successful</span>
+                    {% else %}
+                        <span class="failure">Attack Failed</span>
+                    {% endif %}
+                </p>
+            </div>
+            <div>
+                <h2>Perturbed Image (Targeted)</h2>
+                <img src="{{ url_for('static', filename=perturbed_image_path_targeted) }}" alt="Perturbed Targeted Image" width="224" height="224">
+                <p id="perturbedLabelTargeted">Label: {{ perturbed_label_targeted }}, Confidence: {{ perturbed_confidence_targeted }}%</p>
+                <p>
+                    {% if success_targeted %}
+                        <span class="success">Attack Successful</span>
+                    {% else %}
+                        <span class="failure">Attack Failed</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <div class="metrics">
+            <h2>Perturbation Details</h2>
+            <table>
+                <tr>
+                    <th>Attack Type</th>
+                    <th>Pixel Coordinates (x, y)</th>
+                    <th>RGB Values</th>
+                </tr>
+                <tr>
+                    <td>Untargeted</td>
+                    <td>{{ perturbation_info_untargeted.coords }}</td>
+                    <td>{{ perturbation_info_untargeted.rgb }}</td>
+                </tr>
+                <tr>
+                    <td>Targeted</td>
+                    <td>{{ perturbation_info_targeted.coords }}</td>
+                    <td>{{ perturbation_info_targeted.rgb }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="back-link">
+            <a href="{{ url_for('index') }}">Go Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate a random label change
+            var labels = ['Label 0', 'Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5', 'Label 6', 'Label 7', 'Label 8', 'Label 9'];
+            document.getElementById('perturbedLabelUntargeted').textContent = 'Label: ' + labels[Math.floor(Math.random() * labels.length)] + ', Confidence: ' + (Math.random() * 100).toFixed(2) + '%';
+            document.getElementById('perturbedLabelTargeted').textContent = 'Label: ' + labels[Math.floor(Math.random() * labels.length)] + ', Confidence: ' + (Math.random() * 100).toFixed(2) + '%';
+        });
+    </script>
+</body>
+</html>

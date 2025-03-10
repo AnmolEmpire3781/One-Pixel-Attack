@@ -1,0 +1,97 @@
+templates/train_result.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Training Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .metrics {
+            margin-top: 20px;
+        }
+        .metrics table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .metrics th, .metrics td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .metrics th {
+            background-color: #f2f2f2;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .back-link a {
+            text-decoration: none;
+            color: #3498db;
+            font-size: 18px;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+        pre {
+            background-color: #f8f8f8;
+            padding: 10px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Training Results</h1>
+        <div class="metrics">
+            <h2>Training Metrics</h2>
+            <table>
+                <tr>
+                    <th>Training Loss</th>
+                    <th>Validation Loss</th>
+                    <th>Training Accuracy</th>
+                    <th>Validation Accuracy</th>
+                </tr>
+                <tr>
+                    <td>{{ training_loss }}</td>
+                    <td>{{ validation_loss }}</td>
+                    <td>{{ training_accuracy * 100 }}%</td>
+                    <td>{{ validation_accuracy * 100 }}%</td>
+                </tr>
+            </table>
+        </div>
+        <div class="metrics">
+            <h2>Confusion Matrix</h2>
+            <table>
+                {% for row in confusion_matrix %}
+                    <tr>
+                        {% for cell in row %}
+                            <td>{{ cell }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="metrics">
+            <h2>Classification Report</h2>
+            <pre>{{ classification_report }}</pre>
+        </div>
+        <div class="back-link">
+            <a href="{{ url_for('index') }}">Go Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
